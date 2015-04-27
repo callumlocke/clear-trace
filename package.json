@@ -1,0 +1,40 @@
+{
+  "name": "pretty-stack",
+  "description": "Function to get a more readable stack trace.",
+  "version": "0.0.1-alpha",
+  "author": "Callum Locke",
+  "bugs": {
+    "url": "https://github.com/callumlocke/pretty-stack/issues"
+  },
+  "dependencies": {
+    "chalk": "^1.0.0",
+    "stack-trace": "0.0.9",
+    "subdir": "0.0.3"
+  },
+  "devDependencies": {
+    "babel": "^5.1.13",
+    "babel-eslint": "^3.0.1",
+    "eslint": "^0.20.0"
+  },
+  "files": [
+    "src",
+    "lib",
+    "index.js",
+    "multiform.json"
+  ],
+  "homepage": "https://github.com/callumlocke/pretty-stack",
+  "keywords": [
+    "errors",
+    "stack",
+    "trace"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/callumlocke/pretty-stack"
+  },
+  "scripts": {
+    "prepublish": "eslint src && babel src --out-dir lib"
+  }
+}
