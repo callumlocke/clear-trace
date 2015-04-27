@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "chalk": "^1.0.0",
-    "stack-trace": "0.0.9",
-    "subdir": "0.0.3"
+    "stack-trace": "^0.0.9",
+    "subdir": "^0.0.3"
   },
   "devDependencies": {
     "babel": "^5.1.13",
