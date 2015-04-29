@@ -1,48 +1,43 @@
 'use strict';
 
-import _ from 'lodash';
+import isString from 'lodash/lang/isString';
 import path from 'path';
 import chalk from 'chalk';
 import subdir from 'subdir';
 import stackTrace from 'stack-trace';
+import isAbsolute from './is-absolute';
+
 
 export default function (err, options) {
   if (!err || !err.stack) {
-    return 'Not an error! ' + err;
+    return 'Not an error: ' + err;
   }
 
   if (!options) options = {};
-  if (!_.isString(options.cwd)) options.cwd = process.cwd();
-
-  let doneOneBright;
+  if (!isString(options.cwd)) options.cwd = process.cwd();
 
   return '\n' + chalk.red(err.message) + '\n' + stackTrace.parse(err).map(call => {
-    if (_.isString(call.fileName)) {
-      let colour, filename;
-
-      const isAbsolute = call.fileName.charAt(0) === '/';
+    if (isString(call.fileName)) {
+      const absolute = isAbsolute(call.fileName);
 
       if (
-        isAbsolute &&
+        absolute &&
         subdir(options.cwd, call.fileName) &&
         !subdir(path.join(options.cwd, 'node_modules'), call.fileName)) {
-        colour = (doneOneBright ? chalk.white : chalk.yellow);
-        doneOneBright = true;
+
+        return (
+          (call.functionName ? chalk.gray('  at ') + call.functionName : ' ') +
+          chalk.gray(' in ') + path.join('./', path.relative(options.cwd, call.fileName)) +
+          (call.lineNumber ? chalk.gray(':' + call.lineNumber + ':' + call.columnNumber) : '')
+        );
       }
       else {
-        colour = chalk.gray;
+        return chalk.gray(
+          (call.functionName ? '  at ' + call.functionName : ' ') +
+          ' in ' + path.relative(options.cwd, call.fileName) +
+          (call.lineNumber ? ':' + call.lineNumber + ':' + call.columnNumber : '')
+        );
       }
-
-      filename = isAbsolute ?
-        path.join('./', path.relative(options.cwd, call.fileName)):
-        call.fileName;
-
-
-      return (
-        '  ' + colour(filename) +
-        chalk.gray(':' + call.lineNumber + ':' + call.columnNumber) +
-        chalk.gray(' in ') + colour(call.functionName)
-      );
     }
 
     return chalk.yellow('[unknown]');

@@ -1,10 +1,10 @@
 {
-  "name": "pretty-stack",
+  "name": "clear-trace",
   "description": "Function to get a more readable stack trace.",
   "version": "0.0.2",
   "author": "Callum Locke",
   "bugs": {
-    "url": "https://github.com/callumlocke/pretty-stack/issues"
+    "url": "https://github.com/callumlocke/clear-trace/issues"
   },
   "dependencies": {
     "chalk": "^1.0.0",
@@ -14,7 +14,8 @@
   "devDependencies": {
     "babel": "^5.1.13",
     "babel-eslint": "^3.0.1",
-    "eslint": "^0.20.0"
+    "eslint": "^0.20.0",
+    "nodemon": "^1.3.7"
   },
   "files": [
     "src",
@@ -22,7 +23,7 @@
     "index.js",
     "multiform.json"
   ],
-  "homepage": "https://github.com/callumlocke/pretty-stack",
+  "homepage": "https://github.com/callumlocke/clear-trace",
   "keywords": [
     "errors",
     "stack",
@@ -32,9 +33,11 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/callumlocke/pretty-stack"
+    "url": "https://github.com/callumlocke/clear-trace"
   },
   "scripts": {
-    "prepublish": "eslint src && babel src --out-dir lib"
+    "build": "babel src --out-dir lib",
+    "prepublish": "eslint src && npm run build",
+    "watch": "nodemon --exec 'npm run build' --watch src --watch package.json"
   }
 }

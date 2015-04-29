@@ -1,13 +1,19 @@
-# pretty-stack
+# clear-trace
 
-> Function to get a more useful stack trace, with shorter paths and colour to highlight the most important files.
+> For clearer stack traces in io.js/Node.
+
+## Usage
+
+```sh
+$ npm install clear-trace
+```
+
+### Manual use on individual errors
 
 ```js
-var prettyStack = require('pretty-stack');
+var clearTrace = require('clear-trace');
 
 var err = new Error('oops');
 
-var text = prettyStack(err);
-
-console.log(text);
+console.log( clearTrace(err) ); // logs a readable stack trace
 ```
