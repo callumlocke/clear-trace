@@ -40,6 +40,9 @@ export default function (err, options) {
       }
     }
 
-    return chalk.yellow('[unknown]');
+    return chalk.gray(
+      (call.functionName ? '  at ' + call.functionName : ' ') +
+      ' in [unknown]'
+    );
   }).join('\n');
 }
