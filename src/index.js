@@ -1,11 +1,9 @@
-'use strict';
-
-import isString from 'lodash/lang/isString';
+import isString from 'lodash.isstring';
 import path from 'path';
 import chalk from 'chalk';
 import subdir from 'subdir';
 import stackTrace from 'stack-trace';
-import isAbsolute from './is-absolute';
+import isAbsolute from 'is-absolute';
 
 
 export default function (err, options) {
