@@ -1,9 +1,9 @@
 import isString from 'lodash.isstring';
-import path from 'path';
-import chalk from 'chalk';
-import subdir from 'subdir';
 import stackTrace from 'stack-trace';
 import isAbsolute from 'is-absolute';
+import {join, relative} from 'path';
+import {red, gray} from 'chalk';
+import subdir from 'subdir';
 
 
 export default function (err, options) {
@@ -14,31 +14,36 @@ export default function (err, options) {
   if (!options) options = {};
   if (!isString(options.cwd)) options.cwd = process.cwd();
 
-  return '\n' + chalk.red(err.message) + '\n' + stackTrace.parse(err).map(call => {
+  return '\n' + red(err.message) + '\n' + stackTrace.parse(err).map(call => {
     if (isString(call.fileName)) {
       const absolute = isAbsolute(call.fileName);
 
       if (
         absolute &&
         subdir(options.cwd, call.fileName) &&
-        !subdir(path.join(options.cwd, 'node_modules'), call.fileName)) {
+        !subdir(join(options.cwd, 'node_modules'), call.fileName)) {
 
+        // absolute and within CWD (but not in node_modules folder)
+        // - highlight this line
         return (
-          (call.functionName ? chalk.gray('  at ') + call.functionName : ' ') +
-          chalk.gray(' in ') + path.join('./', path.relative(options.cwd, call.fileName)) +
-          (call.lineNumber ? chalk.gray(':' + call.lineNumber + ':' + call.columnNumber) : '')
+          (call.functionName ? gray('  at ') + call.functionName : ' ') +
+          gray(' in ') + join('./', relative(options.cwd, call.fileName)) +
+          (call.lineNumber ? gray(':' + call.lineNumber + ':' + call.columnNumber) : '')
         );
       }
       else {
-        return chalk.gray(
+
+        // anywhere else - dim this line
+        return gray(
           (call.functionName ? '  at ' + call.functionName : ' ') +
-          ' in ' + path.relative(options.cwd, call.fileName) +
+          ' in ' + relative(options.cwd, call.fileName) +
           (call.lineNumber ? ':' + call.lineNumber + ':' + call.columnNumber : '')
         );
       }
     }
 
-    return chalk.gray(
+    // no filename - dim this line
+    return gray(
       (call.functionName ? '  at ' + call.functionName : ' ') +
       ' in [unknown]'
     );
